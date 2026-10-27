@@ -94,7 +94,15 @@ test('/rtl toggles, stores the mode, and the messages and button follow', async 
   expect((await band.find({ type: 'Text', text: /RTL/ }))?.props.backgroundColor).toBe(OFF_BACKGROUND)
   await band.unmount()
 
-  expect((await $.command.run({ command: 'rtl', args: '', ...RUN })).text).toBe('RTL mode ON')
+  // A desktop draws a native button from its label: it reads just RTL, primary while on.
+  const desktop = await $.ui.mount({ ...BAND, surface: 'desktop' })
+  expect((await desktop.find({ type: 'Button' }))?.props).toMatchObject({ label: 'RTL', variant: 'secondary' })
+  await desktop.press({ key: 'rtl' })
+  expect((await desktop.find({ type: 'Button' }))?.props).toMatchObject({ label: 'RTL', variant: 'primary' })
+  await desktop.unmount()
+  expect(kept.isOn).toBe(true)
+
+  expect((await $.command.run({ command: 'rtl', args: '', ...RUN })).text).toBe('RTL mode OFF')
 })
 
 test('the mode stored by an earlier session is on at start, with the prompt guidance', async ($, on) => {
