@@ -5,6 +5,9 @@ import { GUIDANCE, rewriteText } from './rtl'
 
 const isOn = atom({ plugin: 'rtl-mode', key: 'isOn' } as const, false)
 
+export const ON_BACKGROUND = '#3F8F6B'
+export const OFF_BACKGROUND = '#5A5A5A'
+
 // $.state redraws the readers; $.store keeps the mode for the next session.
 async function setMode($: EngineInterface, value: (was: boolean) => boolean) {
   const next = await update($, isOn, value)
@@ -50,13 +53,17 @@ export const register: Register = on => {
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     if (e.props.hasSurvey) return next(e)
     const value = await read($, isOn)
-    const { Button, Text } = $.ui.resolve(e)
+    const { Box, Button, Text } = $.ui.resolve(e)
 
+    // A small chip at the band's right edge: soft green when on, neutral gray when off.
     return (
-      <Button key="rtl" label={`RTL ${value ? 'ON' : 'OFF'}`} plain onPress={() => setMode($, was => !was)}>
-        RTL{' '}
-        {value ? <Text color="#17DD95" bold>ON</Text> : <Text dimColor>OFF</Text>}
-      </Button>
+      <Box justifyContent="flex-end">
+        <Button key="rtl" label={`RTL ${value ? 'ON' : 'OFF'}`} plain onPress={() => setMode($, was => !was)}>
+          <Text color="#FFFFFF" backgroundColor={value ? ON_BACKGROUND : OFF_BACKGROUND}>
+            {' RTL '}
+          </Text>
+        </Button>
+      </Box>
     )
   })
 

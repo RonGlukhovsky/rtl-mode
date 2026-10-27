@@ -1,5 +1,6 @@
 import { expect, mock, test } from 'claude-code/testing'
 
+import { OFF_BACKGROUND, ON_BACKGROUND } from '../hooks/register'
 import { LRE, LRM, PDF, RLE, RLM, rewriteText } from '../hooks/rtl'
 
 test('a Hebrew line opens RTL and embeds its English code spans', () => {
@@ -87,10 +88,10 @@ test('/rtl toggles, stores the mode, and the messages and button follow', async 
   await after.unmount()
 
   const band = await $.ui.mount({ ...BAND, surface: 'terminal' })
-  expect((await band.find({ type: 'Text', text: 'ON' }))?.props.color).toBe('#17DD95')
+  expect((await band.find({ type: 'Text', text: /RTL/ }))?.props.backgroundColor).toBe(ON_BACKGROUND)
   await band.press({ key: 'rtl' })
   expect(kept.isOn).toBe(false)
-  expect(await band.find({ type: 'Text', text: 'OFF' })).toBeDefined()
+  expect((await band.find({ type: 'Text', text: /RTL/ }))?.props.backgroundColor).toBe(OFF_BACKGROUND)
   await band.unmount()
 
   expect((await $.command.run({ command: 'rtl', args: '', ...RUN })).text).toBe('RTL mode ON')
