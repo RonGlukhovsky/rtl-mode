@@ -16,6 +16,12 @@ async function setMode($: EngineInterface, value: (was: boolean) => boolean) {
   return next
 }
 
+// Only the terminal needs the direction marks: the other surfaces lay each row out by its
+// first strong letter themselves, and the marks there push Hebrew rows to the left.
+async function shouldRewrite($: EngineInterface, e: { surface: string }) {
+  return e.surface === 'terminal' && (await read($, isOn))
+}
+
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
@@ -39,13 +45,13 @@ export const register: Register = on => {
   })
 
   on('ui.render', { component: 'UserMessage' }, async ($, e, next) => {
-    if (!(await read($, isOn))) return next(e)
+    if (!(await shouldRewrite($, e))) return next(e)
 
     return next({ ...e, props: { ...e.props, text: rewriteText(e.props.text) } })
   })
 
   on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => {
-    if (!(await read($, isOn))) return next(e)
+    if (!(await shouldRewrite($, e))) return next(e)
 
     return next({ ...e, props: { ...e.props, text: rewriteText(e.props.text) } })
   })

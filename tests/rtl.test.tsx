@@ -87,6 +87,11 @@ test('/rtl toggles, stores the mode, and the messages and button follow', async 
   expect((await after.find({ type: 'Text' }))?.text).toBe(`${RLM}${RLE}שלום ${LRE}\`ls\`${PDF}`)
   await after.unmount()
 
+  // A desktop orders Hebrew rows itself: its messages are left as written.
+  const onDesktop = await $.ui.mount({ ...USER, surface: 'desktop' })
+  expect((await onDesktop.find({ type: 'Text' }))?.text).toBe('שלום `ls`')
+  await onDesktop.unmount()
+
   const band = await $.ui.mount({ ...BAND, surface: 'terminal' })
   expect((await band.find({ type: 'Text', text: /RTL/ }))?.props.backgroundColor).toBe(ON_BACKGROUND)
   await band.press({ key: 'rtl' })
