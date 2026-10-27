@@ -94,11 +94,11 @@ test('/rtl toggles, stores the mode, and the messages and button follow', async 
   expect((await band.find({ type: 'Text', text: /RTL/ }))?.props.backgroundColor).toBe(OFF_BACKGROUND)
   await band.unmount()
 
-  // A desktop draws a native button from its label: it reads just RTL, primary while on.
+  // A desktop draws a native button from its label: RTL ○ off, RTL ● and primary while on.
   const desktop = await $.ui.mount({ ...BAND, surface: 'desktop' })
-  expect((await desktop.find({ type: 'Button' }))?.props).toMatchObject({ label: 'RTL', variant: 'secondary' })
+  expect((await desktop.find({ type: 'Button' }))?.props).toMatchObject({ label: 'RTL ○', variant: 'secondary' })
   await desktop.press({ key: 'rtl' })
-  expect((await desktop.find({ type: 'Button' }))?.props).toMatchObject({ label: 'RTL', variant: 'primary' })
+  expect((await desktop.find({ type: 'Button' }))?.props).toMatchObject({ label: 'RTL ●', variant: 'primary' })
   await desktop.unmount()
   expect(kept.isOn).toBe(true)
 

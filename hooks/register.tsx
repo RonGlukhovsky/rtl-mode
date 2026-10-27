@@ -56,6 +56,7 @@ export const register: Register = on => {
     const { Box, Button, Text } = $.ui.resolve(e)
 
     const background = value ? ON_BACKGROUND : OFF_BACKGROUND
+    const label = value ? 'RTL ●' : 'RTL ○'
 
     // A small chip at the band's right edge: on the terminal soft green when on, neutral
     // gray when off. A desktop draws its native button from `label` alone, primary while on.
@@ -63,13 +64,13 @@ export const register: Register = on => {
       <Box justifyContent="flex-end">
         <Button
           key="rtl"
-          label="RTL"
+          label={label}
           plain
           variant={value ? 'primary' : 'secondary'}
           onPress={() => setMode($, was => !was)}
         >
           <Text color="#FFFFFF" backgroundColor={background}>
-            {' RTL '}
+            {` ${label} `}
           </Text>
         </Button>
       </Box>
