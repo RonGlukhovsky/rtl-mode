@@ -1,0 +1,5 @@
+{
+  "name": "rtl-mode-local",
+  "owner": { "name": "RonGlukhovsky" },
+  "plugins": [{ "name": "rtl-mode", "source": "./" }]
+}
