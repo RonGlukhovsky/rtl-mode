@@ -57,24 +57,21 @@ export const register: Register = on => {
 
     const background = value ? ON_BACKGROUND : OFF_BACKGROUND
 
-    // A small chip at the band's right edge: soft green when on, neutral gray when off.
-    // A desktop draws a native button from `label` alone, so the color sits on the Box
-    // around it and `variant` marks the on state there too.
+    // A small chip at the band's right edge: on the terminal soft green when on, neutral
+    // gray when off. A desktop draws its native button from `label` alone, primary while on.
     return (
       <Box justifyContent="flex-end">
-        <Box backgroundColor={background}>
-          <Button
-            key="rtl"
-            label="RTL"
-            plain
-            variant={value ? 'primary' : 'secondary'}
-            onPress={() => setMode($, was => !was)}
-          >
-            <Text color="#FFFFFF" backgroundColor={background}>
-              {' RTL '}
-            </Text>
-          </Button>
-        </Box>
+        <Button
+          key="rtl"
+          label="RTL"
+          plain
+          variant={value ? 'primary' : 'secondary'}
+          onPress={() => setMode($, was => !was)}
+        >
+          <Text color="#FFFFFF" backgroundColor={background}>
+            {' RTL '}
+          </Text>
+        </Button>
       </Box>
     )
   })
